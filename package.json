@@ -1,0 +1,19 @@
+{
+  "name": "premiya-redesign",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Redesign proposal for the “Prize for Good Deeds” landing page — static HTML/CSS/JS, Figma design system, deployed on Vercel.",
+  "homepage": "https://premiya-redesign.vercel.app",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Nochmall/Premiya.git"
+  },
+  "scripts": {
+    "dev": "npx --yes serve site --listen 3000",
+    "preview": "cd site && npx --yes vercel@latest deploy",
+    "deploy": "cd site && npx --yes vercel@latest deploy --prod"
+  },
+  "engines": {
+    "node": ">=18"
+  }
+}
