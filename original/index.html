@@ -2012,7 +2012,14 @@
     var cv = document.querySelector('.silk .dna');
     if (!cv || !cv.getContext) return;
     var ctx = cv.getContext('2d');
-    var dpr = Math.min(window.devicePixelRatio || 1, 2);
+    /* телефоны и планшеты: лента рисуется в 1x и реже — иначе на iPhone тормозят прокрутка и появление блоков */
+    var light = window.matchMedia && window.matchMedia('(max-width: 1023px), (pointer: coarse)').matches;
+    var dpr = light ? 1 : Math.min(window.devicePixelRatio || 1, 2);
+    var scrolling = false, scrollT = null;
+    window.addEventListener('scroll', function () {
+      scrolling = true; clearTimeout(scrollT);
+      scrollT = setTimeout(function () { scrolling = false; }, 180);
+    }, { passive: true });
     var W = 0, H = 0;
     function size() {
       W = cv.clientWidth; H = cv.clientHeight;
@@ -2102,7 +2109,7 @@
     }
 
     function loop(now) {
-      if (now - last > 22) { draw(now); last = now; }
+      if (!(light && scrolling) && now - last > (light ? 50 : 22)) { draw(now); last = now; }
       requestAnimationFrame(loop);
     }
 
@@ -2132,16 +2139,17 @@
       setTimeout(function () { el.classList.add('in'); }, delay);
     }
 
+    /* задержка — только среди блоков, которые появились одновременно (ряд карточек на десктопе);
+       на телефоне блок, вошедший в экран один, анимируется сразу, а не ждёт своего номера в списке */
     var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var el = e.target;
+      var batch = entries.filter(function (e) { return e.isIntersecting; }).map(function (e) { return e.target; });
+      batch.sort(function (a, b) { var ra = a.getBoundingClientRect(), rb = b.getBoundingClientRect(); return (ra.top - rb.top) || (ra.left - rb.left); });
+      batch.forEach(function (el, i) {
         io.unobserve(el);
-        var sibs = el.parentNode ? Array.prototype.indexOf.call(el.parentNode.children, el) : 0;
-        var step = el.classList.contains('fstep') ? 280 : 130;
-        show(el, Math.min(sibs, 5) * step);
+        var step = el.classList.contains('fstep') ? 200 : 110;
+        show(el, Math.min(i, 5) * step);
       });
-    }, { threshold: 0.08, rootMargin: '0px 0px -90px 0px' });
+    }, { threshold: 0.08, rootMargin: '0px 0px -60px 0px' });
 
     Array.prototype.forEach.call(targets, function (el) { io.observe(el); });
 
