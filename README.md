@@ -49,7 +49,7 @@ Breakpoints mirror the Figma variable modes:
 
 ```
 .
-├── site/                 # deployable static site (Vercel project root)
+├── site/                 # deployable static site (Vercel Root Directory)
 │   ├── index.html        # landing page: markup, styles and scripts
 │   ├── politika.html     # privacy policy
 │   ├── zayavka.js        # application form: photo upload and submission
@@ -70,7 +70,9 @@ You can also open `site/index.html` directly in a browser.
 
 ## Deployment
 
-The site is deployed to Vercel from the `site/` directory:
+The Vercel project uses `site/` as its **Root Directory**. With the GitHub integration connected, every push to `main` deploys to production and every other branch or pull request gets a preview URL.
+
+Manual deploys from the repository root:
 
 ```bash
 npm run preview   # preview deployment
@@ -87,7 +89,6 @@ npm run deploy    # production deployment
 
 - Extract CSS and JS into separate files, and collapse the stacked style layers into a single token-driven stylesheet generated from the Figma variables.
 - Replace the inline base64 logos with an optimised SVG.
-- Connect the GitHub repository to Vercel so every push to `main` deploys automatically.
 - Add Lighthouse CI and an automated accessibility check (axe).
 
 ## Credits

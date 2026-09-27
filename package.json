@@ -10,8 +10,8 @@
   },
   "scripts": {
     "dev": "npx --yes serve site --listen 3000",
-    "preview": "cd site && npx --yes vercel@latest deploy",
-    "deploy": "cd site && npx --yes vercel@latest deploy --prod"
+    "preview": "npx --yes vercel@latest deploy",
+    "deploy": "npx --yes vercel@latest deploy --prod"
   },
   "engines": {
     "node": ">=18"
